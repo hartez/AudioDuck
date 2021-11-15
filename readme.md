@@ -10,3 +10,5 @@ I had a need for an easy way to switch music volume from loud to soft and back o
 
 With this, I can set the high and low volumes, then tap the very large volume toggle button to switch.
 
+![Screenshot of the app](https://github.com/hartez/AudioDuck/blob/main/getloud.jpg "Screenshot")
+
