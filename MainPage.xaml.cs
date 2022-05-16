@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Essentials;
 
 namespace AudioDuck
 {
@@ -33,44 +32,121 @@ namespace AudioDuck
 			_volumeService = volumeService;
 
 			ToggleButton.Clicked += Toggle;
-			SetHighVolume.Clicked += SetHigh;
-			SetLowVolume.Clicked += SetLow;
 
-			UpdateVolumeLabels();
+            DecrementHigh.Clicked += DecrementHighVolume;
+            IncrementHigh.Clicked += IncrementHighVolume;
+
+            DecrementLow.Clicked += DecrementLowVolume;
+            IncrementLow.Clicked += IncrementLowVolume;
+
+            Mute.Clicked += ToggleMute;
+
+			// Start out at default low volume
+			_onHigh = true;
+			Toggle();
 		}
 
-		private void SetHigh(object sender, EventArgs e) 
+        private void DecrementHighVolume(object sender, EventArgs e)
+        {
+            _volumeService.SetCurrentVolume(_highVolume);
+            _highVolume = _volumeService.DecrementVolume();
+            _onHigh = true;
+            UpdateUI();
+        }
+
+        private void IncrementHighVolume(object sender, EventArgs e)
+        {
+            _volumeService.SetCurrentVolume(_highVolume);
+            _highVolume = _volumeService.IncrementVolume();
+            _onHigh = true;
+            UpdateUI();
+        }
+
+        private void DecrementLowVolume(object sender, EventArgs e)
+        {
+            _volumeService.SetCurrentVolume(_lowVolume);
+            if (_lowVolume > 1)
+            {
+                _lowVolume = _volumeService.DecrementVolume();
+            }
+            _onHigh = false;
+            UpdateUI();
+        }
+
+        private void IncrementLowVolume(object sender, EventArgs e)
+        {
+            _volumeService.SetCurrentVolume(_lowVolume);
+            _lowVolume = _volumeService.IncrementVolume();
+            _onHigh = false;
+            UpdateUI();
+        }
+
+        private void ToggleMute(object sender, EventArgs e)
+        {
+			VolumeService.ToggleMute();
+			UpdateUI();
+        }
+
+        private void SetHigh(object sender, EventArgs e) 
 		{
 			_highVolume = VolumeService.GetCurrentVolume();
-			UpdateVolumeLabels();
+			UpdateUI();
 		}
 
 		private void SetLow(object sender, EventArgs e)
 		{
-			_lowVolume = VolumeService.GetCurrentVolume();
-			UpdateVolumeLabels();
+			SetLow();
 		}
 
-		void UpdateVolumeLabels() 
+		private void SetLow() 
+		{
+            _lowVolume = VolumeService.GetCurrentVolume();
+            UpdateUI();
+        }
+
+		void UpdateUI() 
 		{
 			HighVolume.Text = _highVolume.ToString();
 			LowVolume.Text = _lowVolume.ToString();
-		}
+
+            if (VolumeService.IsMuted)
+            {
+                Mute.Text = "Unmute";
+            }
+            else
+            {
+                Mute.Text = "Mute";
+            }
+
+			if (_onHigh)
+			{
+                ToggleButton.Text = "Get Quiet";
+            }
+			else 
+			{
+                ToggleButton.Text = "Get Loud";
+            }
+        }
 
 		private void Toggle(object sender, EventArgs e)
         {
-			if (_onHigh)
-			{
-				_onHigh = false;
-				VolumeService.SetCurrentVolume(_lowVolume);
-				ToggleButton.Text = "Get Loud";
-			}
-			else
-			{
-				_onHigh = true;
-				VolumeService.SetCurrentVolume(_highVolume);
-				ToggleButton.Text = "Get Quiet";
-			}
+			Toggle();
 		}
+
+        private void Toggle()
+        {
+            if (_onHigh)
+            {
+                _onHigh = false;
+                VolumeService.SetCurrentVolume(_lowVolume);
+            }
+            else
+            {
+                _onHigh = true;
+                VolumeService.SetCurrentVolume(_highVolume);
+            }
+
+            UpdateUI();
+        }
     }
 }

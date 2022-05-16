@@ -32,24 +32,28 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,*,*,*">
 
         <Label Text="High Volume:" />
 
         <Label x:Name="HighVolume" Grid.Column="1" />
 
-        <Button Text="Set" x:Name="SetHighVolume" Grid.Column="2" Style="{StaticResource Setting}" />
-
+        <Button Text="&lt;" x:Name="DecrementHigh" Grid.Column="2" Style="{StaticResource Setting}" />
+        <Button Text="&gt;" x:Name="IncrementHigh" Grid.Column="3" Style="{StaticResource Setting}" />
+        
         <Label Text="Low Volume:" Grid.Row="1" />
 
         <Label x:Name="LowVolume" Grid.Row="1" Grid.Column="1" />
 
-        <Button Text="Set" x:Name="SetLowVolume" Grid.Row="1" Grid.Column="2" Style="{StaticResource Setting}" />
+        <Button Text="&lt;" x:Name="DecrementLow" Grid.Row="1" Grid.Column="2" Style="{StaticResource Setting}" />
+        <Button Text="&gt;" x:Name="IncrementLow" Grid.Row="1" Grid.Column="3" Style="{StaticResource Setting}" />
+
+        <Button Text="Mute" x:Name="Mute" Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="0" Style="{StaticResource Setting}" MinimumHeightRequest="50" />
 
         <Button x:Name="ToggleButton"
                 Text="Get Loud"
                 Style="{StaticResource Toggle}"
-                Grid.Row="2" Grid.ColumnSpan="3" />
+                Grid.Row="3" Grid.ColumnSpan="4" />
 
     </Grid>
 </ContentPage>

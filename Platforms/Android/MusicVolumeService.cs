@@ -6,6 +6,8 @@ namespace AudioDuck
     {
         AudioManager _audioManager;
 
+        public bool IsMuted => _audioManager.IsStreamMute(Stream.Music);
+
         public MusicVolumeService() 
         {
             _audioManager = AudioManager.FromContext(MainApplication.Current.ApplicationContext);
@@ -16,9 +18,33 @@ namespace AudioDuck
             return _audioManager.GetStreamVolume(Stream.Music);
         }
 
+        public void ToggleMute()
+        {
+            if (IsMuted)
+            {
+                _audioManager.AdjustStreamVolume(Stream.Music, Adjust.Unmute, 0);
+            }
+            else
+            {
+                _audioManager.AdjustStreamVolume(Stream.Music, Adjust.Mute, 0);
+            }
+        }
+
         public void SetCurrentVolume(int volume)
         {
-            _audioManager.SetStreamVolume(Stream.Music, volume, VolumeNotificationFlags.ShowUi);
+            _audioManager.SetStreamVolume(Stream.Music, volume, 0);
+        }
+
+        public int IncrementVolume()
+        {
+            _audioManager.AdjustStreamVolume(Stream.Music, Adjust.Raise, 0);
+            return GetCurrentVolume();
+        }
+
+        public int DecrementVolume()
+        {
+            _audioManager.AdjustStreamVolume(Stream.Music, Adjust.Lower, 0);
+            return GetCurrentVolume();
         }
     }
 }
