@@ -49,7 +49,10 @@ namespace AudioDuck
         private void DecrementHighVolume(object sender, EventArgs e)
         {
             _volumeService.SetCurrentVolume(_highVolume);
-            _highVolume = _volumeService.DecrementVolume();
+            if (_highVolume > 1)
+            {
+                _highVolume = _volumeService.DecrementVolume();
+            }
             _onHigh = true;
             UpdateUI();
         }

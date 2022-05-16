@@ -38,12 +38,14 @@ namespace AudioDuck
         public int IncrementVolume()
         {
             _audioManager.AdjustStreamVolume(Stream.Music, Adjust.Raise, 0);
-            return GetCurrentVolume();
+            return GetCurrentVolume(); 
         }
 
         public int DecrementVolume()
         {
-            _audioManager.AdjustStreamVolume(Stream.Music, Adjust.Lower, 0);
+            // For some reason, AdjustStreamVolume with Adjust.Lower doesn't seem to work
+            var current = GetCurrentVolume();
+            _audioManager.SetStreamVolume(Stream.Music, current - 1, 0);
             return GetCurrentVolume();
         }
     }
